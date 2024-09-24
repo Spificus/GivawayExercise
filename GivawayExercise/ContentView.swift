@@ -84,7 +84,6 @@ struct ContentView: View {
             
             Divider().padding(.vertical)
 
-            // Display total and filtered contacts
             VStack(spacing: 5) {
                 Text("Total Contacts: \(contactService.contacts.count)")
                     .font(.headline)
@@ -98,7 +97,6 @@ struct ContentView: View {
             
             Divider().padding(.vertical)
 
-            // Button to pick a random contact
             Button(action: {
                 if let randomContact = contactService.contacts.randomElement() {
                     selectedInstagramHandle = randomContact.userData?.name ?? "N/A"
@@ -114,7 +112,6 @@ struct ContentView: View {
                     .padding([.leading, .trailing], 20)
             }
             
-            // Display the selected contact's Instagram handle
             if let instagramHandle = selectedInstagramHandle {
                 Text("Winner is: \(instagramHandle)")
                     .font(.headline)
@@ -147,7 +144,7 @@ struct ContentView: View {
 //            }
         }
         .onAppear {
-            contactService.fetchContacts()  // Fetch contacts when the view appears
+            contactService.fetchContacts()
         }
         .sheet(isPresented: $showPaywall) {
            PaywallView(isPremiumUnlocked: $isPremiumUnlocked, showPaywall: $showPaywall)

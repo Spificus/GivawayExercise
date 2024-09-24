@@ -3,7 +3,7 @@ import SwiftUI
 struct PaywallView: View {
     @Binding var isPremiumUnlocked: Bool
     
-    @Binding var showPaywall: Bool  // Add this binding to dismiss the paywall
+    @Binding var showPaywall: Bool
     
     var body: some View {
         VStack {

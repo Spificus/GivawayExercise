@@ -1,6 +1,5 @@
 import Foundation
 
-// ContactResponse model to match the API response
 struct ContactResponse: Codable {
     let contacts: [Contact]
     let count: Int
@@ -13,7 +12,7 @@ class ContactService: ObservableObject {
     @Published var contacts = [Contact]()
 
     let contactsURL = "https://stoplight.io/mocks/highlevel/integrations/39582863/contacts/?locationId=ve9EPM428h8vShlRW1KT"
-    let userUrl = "https://stoplight.io/mocks/highlevel/integrations/39582858/users/" // Base URL for fetching users
+    let userUrl = "https://stoplight.io/mocks/highlevel/integrations/39582858/users/"
 
     func fetchContacts() {
         guard let url = URL(string: contactsURL) else {
@@ -56,7 +55,7 @@ class ContactService: ObservableObject {
 
         for i in 0..<contacts.count {
             let contactId = contacts[i].id
-            let userURLString = "\(userUrl)\(contactId)"  // API URL to get user by contact ID
+            let userURLString = "\(userUrl)\(contactId)"
 
             guard let url = URL(string: userURLString) else {
                 print("Invalid URL for user \(contactId)")
@@ -69,7 +68,6 @@ class ContactService: ObservableObject {
             requestUser.setValue("application/json", forHTTPHeaderField: "Content-Type")
             requestUser.setValue("2021-07-28", forHTTPHeaderField: "Version")
 
-            // Enter the dispatch group before starting each request
             dispatchGroup.enter()
 
             let task = URLSession.shared.dataTask(with: requestUser) { data, response, error in
@@ -93,12 +91,11 @@ class ContactService: ObservableObject {
                         print("Error decoding user data for contact \(contactId): \(error.localizedDescription)")
                     }
                 }
-                dispatchGroup.leave() // Leave the group after the request completes
+                dispatchGroup.leave()
             }
             task.resume()
         }
 
-        // Notify when all user data fetching is complete
         dispatchGroup.notify(queue: .main) {
             print("All user data has been fetched!")
         }

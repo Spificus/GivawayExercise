@@ -5,12 +5,12 @@ struct Contact: Codable, Identifiable {
     let email: String
     let timezone: String
     let country: String
-    let source: String?  // Optional because it may not be present
+    let source: String?
     let dateAdded: String
     let tags: [String]
-    let businessId: String?  // Optional because it may not be present
+    let businessId: String?
     let followers: String
-    var userData: User?  // This will be populated with user details later
+    var userData: User? 
 }
 
 // User model for each user in the response
