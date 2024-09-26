@@ -14,9 +14,8 @@ struct ContentView: View {
     @State private var selectedInstagramHandle: String? = nil
     
     // In-App Purchase: Premium status
-   @State private var isPremiumUnlocked = false
-   @State private var showPaywall = false
-       
+    @State private var isPremiumUnlocked = false
+    @State private var showPaywall = false
     
     // Filtered contacts based on different criteria
     var filteredContacts: [Contact] {
@@ -37,36 +36,39 @@ struct ContentView: View {
         VStack {
             // Filters section
             VStack(alignment: .leading, spacing: 15) {
-                Text("Filter Contacts")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .padding(.bottom, 5)
+                HStack {
+                    Text("Contacts")
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .foregroundColor(.black)
+                    
+                }
+                .padding()
                 
-                // Input fields for filtering
-                VStack(spacing: 10) {
-                    TextField("Filter by First Name", text: $filterFirstName)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                VStack(spacing: 15) {
+                    TextField("First Name", text: $filterFirstName)
+                        .textFieldStyle(InstagramTextFieldStyle())
                     
-                    TextField("Filter by Last Name", text: $filterLastName)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    TextField("Last Name", text: $filterLastName)
+                        .textFieldStyle(InstagramTextFieldStyle())
                     
-                    TextField("Filter by Email", text: $filterEmail)
-                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                    TextField("Email", text: $filterEmail)
+                        .textFieldStyle(InstagramTextFieldStyle())
                     
                     // Phone Number and Instagram Handle behind paywall
                     if isPremiumUnlocked {
-                        TextField("Filter by Phone Number", text: $filterPhoneNumber)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        TextField("Phone Number", text: $filterPhoneNumber)
+                            .textFieldStyle(InstagramTextFieldStyle())
                         
-                        TextField("Filter by Instagram Handle", text: $filterInstagramHandle)
-                            .textFieldStyle(RoundedBorderTextFieldStyle())
+                        TextField("Instagram Handle", text: $filterInstagramHandle)
+                            .textFieldStyle(InstagramTextFieldStyle())
                     } else {
                         Button(action: {
                             showPaywall = true
                         }) {
                             HStack {
                                 Image(systemName: "lock.fill")
-                                Text("Unlock Phone & Instagram Filters")
+                                Text("Unlock Phone & IG Handle Filters")
                             }
                             .padding()
                             .background(Color.blue)
@@ -74,13 +76,18 @@ struct ContentView: View {
                             .cornerRadius(10)
                         }
                         .padding(.top)
+                        .padding(.bottom)
                     }
                 }
                 .padding([.leading, .trailing])
             }
-            .background(Color(.systemGray6))
-            .cornerRadius(10)
-            .padding([.leading, .trailing, .top], 20)
+            .padding([.leading, .trailing], 20)
+            .background(Color.white)
+            .cornerRadius(12)
+            .shadow(radius: 5)
+            .padding([.leading, .trailing, .top])
+            
+            Spacer()
             
             Divider().padding(.vertical)
 
@@ -123,31 +130,29 @@ struct ContentView: View {
                     .padding(.top, 10)
             }
             
-            Divider().padding(.vertical)
-
-//            // Display the filtered contacts in a list
-//            List(filteredContacts) { contact in
-//                VStack(alignment: .leading, spacing: 5) {
-//                    Text("Email: \(contact.email)")
-//                        .font(.subheadline)
-//                        .fontWeight(.semibold)
-//                    
-//                    Text("Country: \(contact.country)")
-//                        .font(.footnote)
-//                        .foregroundColor(.gray)
-//                    
-//                    Text("Instagram Handle: \(contact.userData?.name ?? "N/A")")
-//                        .font(.footnote)
-//                        .foregroundColor(.blue)
-//                }
-//                .padding(.vertical, 5)
-//            }
+            Spacer()
         }
+        .background(Color(.systemGray6).edgesIgnoringSafeArea(.all))
         .onAppear {
             contactService.fetchContacts()
         }
         .sheet(isPresented: $showPaywall) {
-           PaywallView(isPremiumUnlocked: $isPremiumUnlocked, showPaywall: $showPaywall)
-       }
+            PaywallView(isPremiumUnlocked: $isPremiumUnlocked, showPaywall: $showPaywall)
+        }
+    }
+}
+
+// Custom TextField style to mimic Instagram's clean input fields
+struct InstagramTextFieldStyle: TextFieldStyle {
+    func _body(configuration: TextField<Self._Label>) -> some View {
+        configuration
+            .padding(12)
+            .background(Color(.systemGray6))
+            .cornerRadius(10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color(.systemGray4), lineWidth: 1)
+            )
+            .padding(.bottom, 5)
     }
 }
