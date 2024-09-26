@@ -62,6 +62,7 @@ struct ContentView: View {
                         
                         TextField("Instagram Handle", text: $filterInstagramHandle)
                             .textFieldStyle(InstagramTextFieldStyle())
+                            .padding(.bottom)
                     } else {
                         Button(action: {
                             showPaywall = true
